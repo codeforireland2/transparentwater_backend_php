@@ -13,7 +13,7 @@ One file - fetch.php. Currently this calls data in JSON format from water.ie, st
 
 # Installation
 
-Needs to be on an SSL webserver, and you'll need to modify the manifest.json file to reflect its location if you don't choose the same directory name. Otherwise no installation other than uploading the files. Create a dummy current'json file.
+Needs to be on an SSL webserver, and you'll need to modify the manifest.json file to reflect its location if you don't choose the same directory name. Otherwise no installation other than uploading the files. You can use the provided current.json file.
 
 # Icons
 
