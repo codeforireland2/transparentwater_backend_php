@@ -3,13 +3,17 @@ Frontend progressive web app for Code for Ireland Transparent Water project.
 
 This is a minimal progressive web app with a map interface that calls the water data via XHR. 
 
-# Back end
+# Data Call
 
-The async function getData handles the data call. Needs to be updated to retrieve and store data locally for offline use.
+The async function getData handles the data call, which consists for the moment of the single file fetch.php. Needs to be updated to retrieve and store data locally for offline use.
+
+# Backend
+
+One file - fetch.php. Currently this calls data in JSON format from water.ie, stores it as current.json, updates it as required.
 
 # Installation
 
-Needs to be on an SSL webserver, and you'll need to modify the manifest.json file to reflect its location if you don't choose the same directory name. Otherwise no installation other than uploading the files.
+Needs to be on an SSL webserver, and you'll need to modify the manifest.json file to reflect its location if you don't choose the same directory name. Otherwise no installation other than uploading the files. Create a dummy current'json file.
 
 # Icons
 
