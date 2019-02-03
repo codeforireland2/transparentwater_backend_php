@@ -9,7 +9,7 @@ The async function getData handles the data call, which consists for the moment 
 
 # Backend
 
-One file - fetch.php. Currently this calls data in JSON format from water.ie, stores it as current.json, updates it as required.
+One file - fetch.php. Currently this calls data in JSON format from water.ie, stores it as current.json, updates it as required. Needs to be on a PHP enabled server, needs allow_url_fopen on. Can be served from the same server or a separate server (needs to be SSL).
 
 # Installation
 
