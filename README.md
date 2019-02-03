@@ -11,6 +11,10 @@ The async function getData handles the data call.
 
 Needs to be on an SSL webserver, and you'll need to modify the manifest.json file to reflect its location if you don't choose the same directory name. Otherwise no installation other than uploading the files.
 
+# Icons
+
+Should be in a directory images/icons as per manifest.json.
+
 # UI
 
 Could do with some work!
