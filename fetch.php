@@ -1,8 +1,9 @@
 <?
+include("../central/mysqli.php");
 date_default_timezone_set('Europe/Dublin');
 ini_set('display_errors', '1');
-ini_set('allow_url_fopen', '1');
-Header("Access-Control-Allow-Origin: *");
+ini_set('allow_url_fopen', '1');//*ideally unnecessary
+Header("Access-Control-Allow-Origin: *");//*allows this to be called from another server by XHR
 Header("Content-type:application/json; charset=UTF-8");
 
 $date=date("YmdH");
@@ -19,6 +20,11 @@ if(file_exists("current.json")){
 		echo $contents;
 		$contents=preg_replace('/"crs"/','"version":"'.$date.'","crs"',$contents);
 		file_put_contents("current.json",$contents,LOCK_EX);
+		$insert="insert into wsnapshot values(null,'$date','".mysqli_real_escape_string($mysqli,$contents)."')";
+		$get=$mysqli->query($insert);
+		if(!$get){
+			echo '{"version":"error"}';
+		}
 	}
 }
 else{
@@ -27,4 +33,9 @@ else{
 	echo $contents;
 	$contents=preg_replace('/"crs"/','"version":"'.$date.'","crs"',$contents);
 	file_put_contents("current.json",$contents,LOCK_EX);
+	$insert="insert into wsnapshot values(null,'$date','".mysqli_real_escape_string($mysqli,$contents)."')";
+	$get=$mysqli->query($insert);
+	if(!$get){
+		echo '{"version":"error"}';
+	}
 }
