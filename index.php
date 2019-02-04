@@ -35,6 +35,7 @@ ob_start("ob_gzhandler");
  	<link rel="stylesheet" href="css/multirange.css" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <?
+//*could and should be replaced by JS
 $Y=date("Y");
 $m=date("m");
 $M=date("M");
@@ -52,6 +53,7 @@ for($a=0;$a<=50;$a++){
 ?>
 	<SCRIPT LANGUAGE="JavaScript">
 	<!--
+	//**Service Worker code
 	if (navigator.serviceWorker.controller) {
 		console.log('[PWA Builder] active service worker found, no need to register')
 	} 
@@ -75,7 +77,8 @@ for($a=0;$a<=50;$a++){
 	<?echo $datestr;?>
 
 	<?echo $datestr2;?>
-
+	
+	//**to show the dates on the date range slider
 	function showDate(){
 		val=document.getElementById('dslider').value.split(",");
 		start=dates[Math.round(val[0]/2)];
@@ -86,17 +89,6 @@ for($a=0;$a<=50;$a++){
 		doDateRange(start,end);
 	}
 	
-
-	function showPosition(position) {
-		//alert("showPosition");
-		var lat = document.getElementById("lat");
-		var lng = document.getElementById("long");
-		lat.value = position.coords.latitude;
-		lng.value = position.coords.longitude;
-	}
-	function onPosError(error){
-		alert('Error occurred. Error code: ' + error.code);;
-	}
 	//-->
 	</SCRIPT>
 </head>
@@ -124,6 +116,7 @@ for($a=0;$a<=50;$a++){
 
 <SCRIPT LANGUAGE="JavaScript">
 <!--
+	//**map setup code
 	var mymap = L.map('mapid').setView([53.3498, -6.2603], 9);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -131,30 +124,13 @@ for($a=0;$a<=50;$a++){
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoiaWJpcyIsImEiOiJjanJnNnc4ZXMxMjl6NDRwOGU5cnFyNTdjIn0.kDcWA40RF18x99tMlx9UQA'
 }).addTo(mymap);
+//*initial loading popup
 var popup = L.popup()
     .setLatLng([53.1498, -6.2603])
     .setContent('<IMG SRC="loadinfo.gif" WIDTH="200" HEIGHT="200" BORDER="0" ALT="">')
     .openOn(mymap);
-//var marker = L.marker([53.3498, -6.2603]).addTo(mymap);
-//marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
-var data;
-//**calls the system generator
-async function getData(){
-	console.log("makeMap");
-	let response = await fetch('https://www.pizzahutdelivery.ie/z19ghjklpom/fetch.php');
-	let resulttext = await response.text();
-	//console.log(resulttext);
-	if(resulttext.indexOf('FeatureCollection')>-1){
-		//alert("Got the data");
-		data=JSON.parse(resulttext);
-		console.log(data);
-		loadMap();
-	}
-	else{
-		console.log(resulttext);
-	}
-}
+//**different icons
 var redIcon = new L.Icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -179,11 +155,26 @@ var greenIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
-markers=[];
+var data;
+//**fetches the map data
+async function getData(){
+	console.log("makeMap");
+	let response = await fetch('https://www.pizzahutdelivery.ie/z19ghjklpom/fetch.php');
+	let resulttext = await response.text();
+	if(resulttext.indexOf('FeatureCollection')>-1){
+		data=JSON.parse(resulttext);
+		console.log(data);
+		loadMap();
+	}
+	else{
+		//console.log(resulttext);
+	}
+}
+markers=[];//*array of markers for convenience
+//**loads the map data after getData
 function loadMap(){
 	mymap.removeLayer(popup);
 	for(let i=0;i<data.features.length;i++){
-		//console.log(data.features[i].geometry.coordinates[1]+","+data.features[i].geometry.coordinates[0]);
 		lat=data.features[i].geometry.coordinates[1];
 		lon=data.features[i].geometry.coordinates[0];
 		loc=data.features[i].properties.LOCATION;
@@ -197,16 +188,19 @@ function loadMap(){
 		markers[i].bindPopup("<b>"+loc+"</b><br><div style=\"max-height:75vh;overflow:auto\">"+desc+"</div>");
 	}
 }
+//**clears the markers
 function clearMap(){
 	for(let i=0;i<markers.length;i++){
 		mymap.removeLayer(markers[i]);
 	}
 }
+//**resets all markers to 100% opacity
 function clearSearch(){
 	for(let i=0;i<markers.length;i++){
 		markers[i].setOpacity(1);
 	}
 }
+//**place search
 function doSearch(){
 	search=document.getElementById('search').value;
 	for(let i=0;i<data.features.length;i++){
@@ -219,6 +213,7 @@ function doSearch(){
 		}
 	}
 }
+//**limits marker display within date range
 function doDateRange(start,end){
 	console.log(start+","+end);
 	for(let i=0;i<data.features.length;i++){
@@ -244,7 +239,7 @@ function doDateRange(start,end){
 //-->
 </SCRIPT>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" style="color:white" href="#">&copy; RecycleThis 2018</a>
+  <a class="navbar-brand" style="color:white" href="#">&copy; Transparent Water 2019</a>
 </nav>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
