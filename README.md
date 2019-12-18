@@ -1,5 +1,5 @@
 # codeforireland-water-pwa
-Frontend progressive web app for Code for Ireland Transparent Water project.
+Frontend progressive web app for Code for Ireland Transparent Water project. Home is here: https://transparentwater.ie
 
 This is a minimal progressive web app with a map interface that calls the water data via XHR. 
 
