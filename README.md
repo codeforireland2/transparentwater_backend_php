@@ -19,6 +19,10 @@ Assumes a file with a mysql connection string (not included). Table structure is
 
 Needs to be on an SSL webserver, and you'll need to modify the manifest.json file to reflect its location if you don't choose the same directory name. Otherwise no installation other than uploading the files. You can use the provided current.json file.
 
+# Docker (for development)
+
+An adequate Docker image for local development can be found here: https://github.com/wrender/centos-docker-lamp One minor point is that it uses Maria-DB in place of the plain mySQL available on the server - so please don't use any MariaDB-specific tricks!
+
 # Icons
 
 Should be in a directory images/icons as per manifest.json.
